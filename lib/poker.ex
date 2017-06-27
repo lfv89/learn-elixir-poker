@@ -1,6 +1,6 @@
 defmodule Poker do
   def suits do
-   ['d', 'c', 'h', 's']
+   [:d, :c, :h, :s]
   end
 
   def values do
@@ -8,8 +8,8 @@ defmodule Poker do
   end
 
   def deck_of_cards do
-    for _suit <- suits(), _value <- values() do
-
+    for suit <- suits(), value <- values() do
+      String.upcase("#{value}#{suit}")
     end
   end
 end
