@@ -2,43 +2,39 @@ defmodule PokerTest do
   use ExUnit.Case
   doctest Poker
 
-  test "suits returns available suits" do
-    assert Poker.suits == [:d, :c, :h, :s]
+  test "round has a deck list with 43 cards" do
+    %Round { deck: deck } = Poker.round
+
+    assert length(deck) == 43
   end
 
-  test "values returns available values" do
-    assert Poker.values == Enum.to_list(2..14)
+  test "round has a board list with 5 cards" do
+    %Round { board: board } = Poker.round
+
+    assert length(board) == 5
+    assert length(board) == 5
   end
 
-  test "deck of cards contains 52 elements" do
-    assert length(Poker.deck_of_cards) == 52
+  test "round has a hands tuple with 2 hands, each with 2 cards" do
+    %Round { hands: { h1, h2 } } = Poker.round
+
+    assert length(h1) == 2
+    assert length(h2) == 2
   end
 
-  test "deck of cards contains all of the diamonds cards" do
-    diamonds = ["2D", "3D", "4D", "5D", "6D", "7D", "8D",
-                "9D", "10D", "11D", "12D", "13D", "14D"]
+  test "round's deck and board doesn't have repeated cards among them" do
+    %Round { deck: deck, board: board } = Poker.round
 
-    assert(Enum.all?(diamonds, fn(diamond) -> Enum.member?(Poker.deck_of_cards, diamond) end))
+    assert length(Enum.reject(deck, fn(card) ->
+      Enum.member?(List.flatten(board), card)
+    end)) == length(deck)
   end
 
-  test "deck of cards contains all of the clubs cards" do
-    clubs = ["2C", "3C", "4C", "5C", "6C", "7C", "8C",
-             "9C", "10C", "11C", "12C", "13C", "14C"]
+  test "round's deck and hands doesn't have repeated cards among them" do
+    %Round { deck: deck, hands: hands } = Poker.round
 
-    assert(Enum.all?(clubs, fn(club) -> Enum.member?(Poker.deck_of_cards, club) end))
-  end
-
-  test "deck of cards contains all of the hearts cards" do
-    hearts = ["2H", "3H", "4H", "5H", "6H", "7H", "8H",
-             "9H", "10H", "11H", "12H", "13H", "14H"]
-
-    assert(Enum.all?(hearts, fn(heart) -> Enum.member?(Poker.deck_of_cards, heart) end))
-  end
-
-  test "deck of cards contains all of the spades cards" do
-    spades = ["2S", "3S", "4S", "5S", "6S", "7S", "8S",
-             "9S", "10S", "11S", "12S", "13S", "14S"]
-
-    assert(Enum.all?(spades, fn(spade) -> Enum.member?(Poker.deck_of_cards, spade) end))
+    assert length(Enum.reject(deck, fn(card) ->
+      Enum.member?(List.flatten(Tuple.to_list(hands)), card)
+    end)) == length(deck)
   end
 end
