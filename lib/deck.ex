@@ -12,4 +12,12 @@ defmodule Deck do
       String.upcase("#{value}#{suit}")
     end
   end
+
+  def extract_suits(cards) do
+    List.flatten(Enum.map(cards, fn(e) -> Regex.replace(~r/\d/, e, "") end))
+  end
+
+  def extract_values(cards) do
+    Enum.map(List.flatten(Enum.map(cards, fn(e) -> Regex.run(~r/\d/, e) end)), fn(e) -> String.to_integer(e) end)
+  end
 end
