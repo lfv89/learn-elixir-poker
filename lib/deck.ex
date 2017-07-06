@@ -14,10 +14,10 @@ defmodule Deck do
   end
 
   def extract_suits(cards) do
-    List.flatten(Enum.map(cards, fn(e) -> Regex.replace(~r/\d/, e, "") end))
+    List.flatten(Enum.map(cards, fn(e) -> Regex.replace(~r/\d{1,2}/, e, "") end))
   end
 
   def extract_values(cards) do
-    Enum.map(List.flatten(Enum.map(cards, fn(e) -> Regex.run(~r/\d/, e) end)), fn(e) -> String.to_integer(e) end)
+    Enum.map(List.flatten(Enum.map(cards, fn(e) -> List.last(Regex.run(~r/(\d{1,2})+/, e))  end)), fn(e) -> String.to_integer(e) end)
   end
 end
